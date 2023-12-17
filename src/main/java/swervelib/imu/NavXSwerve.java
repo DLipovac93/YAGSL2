@@ -11,19 +11,13 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
 
-/**
- * Communicates with the NavX as the IMU.
- */
-public class NavXSwerve extends SwerveIMU
-{
+/** Communicates with the NavX as the IMU. */
+public class NavXSwerve extends SwerveIMU {
 
-  /**
-   * NavX IMU.
-   */
-  private AHRS       gyro;
-  /**
-   * Offset for the NavX.
-   */
+  /** NavX IMU. */
+  private AHRS gyro;
+
+  /** Offset for the NavX. */
   private Rotation3d offset = new Rotation3d();
 
   /**
@@ -31,18 +25,15 @@ public class NavXSwerve extends SwerveIMU
    *
    * @param port Serial Port to connect to.
    */
-  public NavXSwerve(SerialPort.Port port)
-  {
-    try
-    {
+  public NavXSwerve(SerialPort.Port port) {
+    try {
       /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
       /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
       /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
       gyro = new AHRS(port);
       factoryDefault();
       SmartDashboard.putData(gyro);
-    } catch (RuntimeException ex)
-    {
+    } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX:  " + ex.getMessage(), true);
     }
   }
@@ -52,18 +43,15 @@ public class NavXSwerve extends SwerveIMU
    *
    * @param port SPI Port to connect to.
    */
-  public NavXSwerve(SPI.Port port)
-  {
-    try
-    {
+  public NavXSwerve(SPI.Port port) {
+    try {
       /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
       /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
       /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
       gyro = new AHRS(port);
       factoryDefault();
       SmartDashboard.putData(gyro);
-    } catch (RuntimeException ex)
-    {
+    } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX:  " + ex.getMessage(), true);
     }
   }
@@ -73,50 +61,42 @@ public class NavXSwerve extends SwerveIMU
    *
    * @param port I2C Port to connect to.
    */
-  public NavXSwerve(I2C.Port port)
-  {
-    try
-    {
+  public NavXSwerve(I2C.Port port) {
+    try {
       /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
       /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
       /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
       gyro = new AHRS(port);
       factoryDefault();
       SmartDashboard.putData(gyro);
-    } catch (RuntimeException ex)
-    {
+    } catch (RuntimeException ex) {
       DriverStation.reportError("Error instantiating navX:  " + ex.getMessage(), true);
     }
   }
 
-  /**
-   * Reset IMU to factory default.
-   */
+  /** Reset IMU to factory default. */
   @Override
-  public void factoryDefault()
-  {
+  public void factoryDefault() {
     // gyro.reset(); // Reported to be slow
-    offset = new Rotation3d(new Quaternion(gyro.getQuaternionW(),
-                                           gyro.getQuaternionX(),
-                                           gyro.getQuaternionY(),
-                                           gyro.getQuaternionZ()));
+    offset =
+        new Rotation3d(
+            new Quaternion(
+                gyro.getQuaternionW(),
+                gyro.getQuaternionX(),
+                gyro.getQuaternionY(),
+                gyro.getQuaternionZ()));
   }
 
-  /**
-   * Clear sticky faults on IMU.
-   */
+  /** Clear sticky faults on IMU. */
   @Override
-  public void clearStickyFaults()
-  {
-  }
+  public void clearStickyFaults() {}
 
   /**
    * Set the gyro offset.
    *
    * @param offset gyro offset as a {@link Rotation3d}.
    */
-  public void setOffset(Rotation3d offset)
-  {
+  public void setOffset(Rotation3d offset) {
     this.offset = offset;
   }
 
@@ -125,13 +105,13 @@ public class NavXSwerve extends SwerveIMU
    *
    * @return {@link Rotation3d} from the IMU.
    */
-  public Rotation3d getRawRotation3d()
-  {
-    return new Rotation3d(new Quaternion(gyro.getQuaternionW() * 0.5,
-                                         gyro.getQuaternionX() * 0.5,
-                                         gyro.getQuaternionY() * 0.5,
-                                         gyro.getQuaternionZ() *
-                                         0.5)); // TODO: Remove when Studica's official release is made.
+  public Rotation3d getRawRotation3d() {
+    return new Rotation3d(
+        new Quaternion(
+            gyro.getQuaternionW() * 0.5,
+            gyro.getQuaternionX() * 0.5,
+            gyro.getQuaternionY() * 0.5,
+            gyro.getQuaternionZ() * 0.5)); // TODO: Remove when Studica's official release is made.
   }
 
   /**
@@ -140,25 +120,23 @@ public class NavXSwerve extends SwerveIMU
    * @return {@link Rotation3d} from the IMU.
    */
   @Override
-  public Rotation3d getRotation3d()
-  {
+  public Rotation3d getRotation3d() {
     return getRawRotation3d().minus(offset);
   }
 
   /**
-   * Fetch the acceleration [x, y, z] from the IMU in meters per second squared. If acceleration isn't supported returns
-   * empty.
+   * Fetch the acceleration [x, y, z] from the IMU in meters per second squared. If acceleration
+   * isn't supported returns empty.
    *
    * @return {@link Translation3d} of the acceleration as an {@link Optional}.
    */
   @Override
-  public Optional<Translation3d> getAccel()
-  {
+  public Optional<Translation3d> getAccel() {
     return Optional.of(
         new Translation3d(
-            gyro.getWorldLinearAccelX(),
-            gyro.getWorldLinearAccelY(),
-            gyro.getWorldLinearAccelZ())
+                gyro.getWorldLinearAccelX(),
+                gyro.getWorldLinearAccelY(),
+                gyro.getWorldLinearAccelZ())
             .times(9.81));
   }
 
@@ -168,8 +146,7 @@ public class NavXSwerve extends SwerveIMU
    * @return IMU object.
    */
   @Override
-  public Object getIMU()
-  {
+  public Object getIMU() {
     return gyro;
   }
 }
