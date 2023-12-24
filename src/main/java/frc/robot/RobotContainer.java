@@ -69,21 +69,21 @@ public class RobotContainer
                                                                          () -> driverJoystickController.getRawAxis(2));
 
     new AbsoluteDriveAdv(drivebase,
-                                                                      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                      () -> MathUtil.applyDeadband(driverJoystick.getLeftY(),
                                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
-                                                                      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                      () -> MathUtil.applyDeadband(driverJoystick.getLeftX(),
                                                                                                   OperatorConstants.LEFT_X_DEADBAND),
-                                                                      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-                                                                                                  OperatorConstants.RIGHT_X_DEADBAND), 
-                                                                      driverJoystickController::getYButtonPressed;
-                                                                    
+                                                                      () -> MathUtil.applyDeadband(driverJoystick.getRightX(),
+                                                                                                  (OperatorConstants.RIGHT_X_DEADBAND)
+                                                                     () driverJoystickController:)getYButtonPressed);
+  }
 
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
    * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
+   * {@link CommandJoystickController Joystick}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings()
@@ -91,7 +91,7 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverJoystickController, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverJoystickController 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    new JoystickButton(driverJoystickController, 0 ).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
