@@ -12,17 +12,14 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class TeleopDrive extends CommandBase
-{
+/** An example command that uses an example subsystem. */
+public class TeleopDrive extends CommandBase {
 
-  private final SwerveSubsystem  swerve;
-  private final DoubleSupplier   vX;
-  private final DoubleSupplier   vY;
-  private final DoubleSupplier   omega;
-  private final BooleanSupplier  driveMode;
+  private final SwerveSubsystem swerve;
+  private final DoubleSupplier vX;
+  private final DoubleSupplier vY;
+  private final DoubleSupplier omega;
+  private final BooleanSupplier driveMode;
   private final SwerveController controller;
 
   /**
@@ -30,9 +27,12 @@ public class TeleopDrive extends CommandBase
    *
    * @param swerve The subsystem used by this command.
    */
-  public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier omega,
-                     BooleanSupplier driveMode)
-  {
+  public TeleopDrive(
+      SwerveSubsystem swerve,
+      DoubleSupplier vX,
+      DoubleSupplier vY,
+      DoubleSupplier omega,
+      BooleanSupplier driveMode) {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
@@ -45,37 +45,32 @@ public class TeleopDrive extends CommandBase
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize()
-  {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute()
-  {
-    double xVelocity   = Math.pow(vX.getAsDouble(), 3);
-    double yVelocity   = Math.pow(vY.getAsDouble(), 3);
+  public void execute() {
+    double xVelocity = Math.pow(vX.getAsDouble(), 3);
+    double yVelocity = Math.pow(vY.getAsDouble(), 3);
     double angVelocity = Math.pow(omega.getAsDouble(), 3);
     SmartDashboard.putNumber("vX", xVelocity);
     SmartDashboard.putNumber("vY", yVelocity);
     SmartDashboard.putNumber("omega", angVelocity);
 
     // Drive using raw values.
-    swerve.drive(new Translation2d(xVelocity * swerve.maximumSpeed, yVelocity * swerve.maximumSpeed),
-                 angVelocity * controller.config.maxAngularVelocity,
-                 driveMode.getAsBoolean());
+    swerve.drive(
+        new Translation2d(xVelocity * swerve.maximumSpeed, yVelocity * swerve.maximumSpeed),
+        angVelocity * controller.config.maxAngularVelocity,
+        driveMode.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted)
-  {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished()
-  {
+  public boolean isFinished() {
     return false;
   }
 }
