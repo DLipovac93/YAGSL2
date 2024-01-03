@@ -30,25 +30,8 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder {
   }
 
   /**
-<<<<<<< HEAD
    * Reset the encoder to factory defaults.
    */
-=======
-   * Run the configuration until it succeeds or times out.
-   *
-   * @param config Lambda supplier returning the error state.
-   */
-  private void configureSparkMax(Supplier<REVLibError> config) {
-    for (int i = 0; i < maximumRetries; i++) {
-      if (config.get() == REVLibError.kOk) {
-        return;
-      }
-    }
-    DriverStation.reportWarning("Failure configuring encoder", true);
-  }
-
-  /** Reset the encoder to factory defaults. */
->>>>>>> d966db5a6a7ce3c435cb499b38b7acbae8a07147
   @Override
   public void factoryDefault() {
     // Do nothing

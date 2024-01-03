@@ -304,18 +304,10 @@ public class SparkMaxSwerve extends SwerveMotor {
    * @param feedforward Feedforward in volt-meter-per-second or kV.
    */
   @Override
-<<<<<<< HEAD
   public void setReference(double setpoint, double feedforward)
   {
     //    int pidSlot =
 //        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
-=======
-  public void setReference(double setpoint, double feedforward) {
-    boolean possibleBurnOutIssue = true;
-    //    int pidSlot =
-    //        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() :
-    // SparkMAX_slotIdx.Position.ordinal();
->>>>>>> d966db5a6a7ce3c435cb499b38b7acbae8a07147
     int pidSlot = 0;
 
     if (isDriveMotor) {

@@ -105,7 +105,6 @@ public class NavXSwerve extends SwerveIMU {
    *
    * @return {@link Rotation3d} from the IMU.
    */
-<<<<<<< HEAD
   public Rotation3d getRawRotation3d()
   {
     return new Rotation3d(new Quaternion(gyro.getQuaternionW() * 0.5,
@@ -113,15 +112,6 @@ public class NavXSwerve extends SwerveIMU {
                                          gyro.getQuaternionY() * 0.5,
                                          gyro.getQuaternionZ() *
                                          0.5)); 
-=======
-  public Rotation3d getRawRotation3d() {
-    return new Rotation3d(
-        new Quaternion(
-            gyro.getQuaternionW() * 0.5,
-            gyro.getQuaternionX() * 0.5,
-            gyro.getQuaternionY() * 0.5,
-            gyro.getQuaternionZ() * 0.5)); // TODO: Remove when Studica's official release is made.
->>>>>>> d966db5a6a7ce3c435cb499b38b7acbae8a07147
   }
 
   /**

@@ -14,7 +14,6 @@ public class SwerveController {
    * for controlling the robot heading, and deadband for heading joystick.
    */
   public final SwerveControllerConfiguration config;
-<<<<<<< HEAD
   /**
    * PID Controller for the robot heading.
    */
@@ -35,23 +34,6 @@ public class SwerveController {
    * {@link SlewRateLimiter} for angular movement in radians/second.
    */
   public       SlewRateLimiter               angleLimiter = null;
-=======
-
-  /** PID Controller for the robot heading. */
-  public final PIDController thetaController; // TODO: Switch to ProfilePIDController
-
-  /** Last angle as a scalar [-1,1] the robot was set to. */
-  public double lastAngleScalar;
-
-  /** {@link SlewRateLimiter} for movement in the X direction in meters/second. */
-  public SlewRateLimiter xLimiter = null;
-
-  /** {@link SlewRateLimiter} for movement in the Y direction in meters/second. */
-  public SlewRateLimiter yLimiter = null;
-
-  /** {@link SlewRateLimiter} for angular movement in radians/second. */
-  public SlewRateLimiter angleLimiter = null;
->>>>>>> d966db5a6a7ce3c435cb499b38b7acbae8a07147
 
   /**
    * Construct the SwerveController object which is used for determining the speeds of the robot

@@ -81,23 +81,6 @@ public class SwerveParser {
   }
 
   /**
-<<<<<<< HEAD
-=======
-   * Open JSON file.
-   *
-   * @param file JSON File to open.
-   * @return JsonNode of file.
-   */
-  private JsonNode openJson(File file) {
-    try {
-      return new ObjectMapper().readTree(file);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  /**
->>>>>>> d966db5a6a7ce3c435cb499b38b7acbae8a07147
    * Check directory structure.
    *
    * @param directory JSON Configuration Directory
