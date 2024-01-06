@@ -85,7 +85,8 @@ public class SparkMaxBrushedMotorSwerve extends SwerveMotor {
     }
 
     // Spin off configurations in a different thread.
-    // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented it out because it prevents feedback.
+    // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented it out because it prevents
+    // feedback.
   }
 
   /**
@@ -285,7 +286,7 @@ public class SparkMaxBrushedMotorSwerve extends SwerveMotor {
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, CANStatus2));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, CANStatus3));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, CANStatus4));
-    
+
     //  https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces
   }
 

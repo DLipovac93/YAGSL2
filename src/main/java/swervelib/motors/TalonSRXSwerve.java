@@ -170,7 +170,6 @@ public class TalonSRXSwerve extends SwerveMotor {
     motor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, CANStatus21);
     motor.setStatusFramePeriod(StatusFrameEnhanced.Status_Brushless_Current, CANStatusCurrent);
 
-    
     // https://v5.docs.ctr-electronics.com/en/stable/ch18_CommonAPI.html#setting-status-frame-periods
   }
 

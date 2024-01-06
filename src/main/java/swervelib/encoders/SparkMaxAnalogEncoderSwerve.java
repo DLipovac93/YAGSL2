@@ -29,9 +29,7 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder {
     }
   }
 
-  /**
-   * Reset the encoder to factory defaults.
-   */
+  /** Reset the encoder to factory defaults. */
   @Override
   public void factoryDefault() {
     // Do nothing

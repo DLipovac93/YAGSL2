@@ -52,7 +52,8 @@ public class SparkMaxSwerve extends SwerveMotor {
         encoder); // Configure feedback of the PID controller as the integrated encoder.
 
     // Spin off configurations in a different thread.
-    // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented out because it prevents feedback.
+    // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented out because it prevents
+    // feedback.
   }
 
   /**
@@ -253,7 +254,7 @@ public class SparkMaxSwerve extends SwerveMotor {
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, CANStatus2));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, CANStatus3));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, CANStatus4));
-  
+
     //  https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces
   }
 
@@ -304,10 +305,10 @@ public class SparkMaxSwerve extends SwerveMotor {
    * @param feedforward Feedforward in volt-meter-per-second or kV.
    */
   @Override
-  public void setReference(double setpoint, double feedforward)
-  {
+  public void setReference(double setpoint, double feedforward) {
     //    int pidSlot =
-//        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
+    //        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() :
+    // SparkMAX_slotIdx.Position.ordinal();
     int pidSlot = 0;
 
     if (isDriveMotor) {
