@@ -19,12 +19,12 @@
     "drive": 0
   },
   "encoder": {
-    "type": "cancoder",
+    "type": "canandcoder_can",
     "id": 9,
     "canbus": 9
   },
   "inverted": {
-    "drive": true,
-    "angle": true
+    "drive": false,
+    "angle": false
   }
 }
