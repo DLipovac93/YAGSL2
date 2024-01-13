@@ -6,19 +6,17 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
+import frc.robot.commands.swervedrive.drivebase.SwerveCommand;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -40,7 +38,7 @@ public class RobotContainer {
 
   // CommandJoystick driverController   = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(0);
+  CommandXboxController driverXbox = new CommandXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -65,17 +63,21 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
-    AbsoluteDriveAdv closedAbsoluteDriveAdv =
-        new AbsoluteDriveAdv(
-            drivebase,
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () ->
-                MathUtil.applyDeadband(driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
-            driverXbox::getYButtonPressed,
-            driverXbox::getAButtonPressed,
-            driverXbox::getXButtonPressed,
-            driverXbox::getBButtonPressed);
+    // AbsoluteDriveAdv closedAbsoluteDriveAdv =
+    //     new AbsoluteDriveAdv(
+    //         drivebase,
+    //         () -> MathUtil.applyDeadband(driverController.getY(),
+    // OperatorConstants.LEFT_Y_DEADBAND),
+    //         () -> MathUtil.applyDeadband(driverController.getX(),
+    // OperatorConstants.LEFT_X_DEADBAND),
+    //         () -> MathUtil.applyDeadband(driverController.getZ(),
+    // OperatorConstants.RIGHT_X_DEADBAND),
+    //         driverXbox::getYButtonPressed,
+    //         driverXbox::getAButtonPressed,
+    //         driverXbox::getXButtonPressed,
+    //         driverXbox::getBButtonPressed);
+
+    SwerveCommand swerveCommand = new SwerveCommand(drivebase, driverController);
 
     TeleopDrive simClosedFieldRel =
         new TeleopDrive(
@@ -91,11 +93,10 @@ public class RobotContainer {
                 MathUtil.applyDeadband(driverController.getY(), OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(driverController.getX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -driverController.getRawAxis(3),
+            () -> -driverController.getZ(),
             () -> true);
 
-    drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? closedAbsoluteDrive : closedFieldAbsoluteDrive);
+    drivebase.setDefaultCommand(closedFieldRel);
   }
 
   /**
@@ -110,10 +111,12 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, 2).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    // new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    // new JoystickButton(driverXbox, 2).onTrue(new
+    // InstantCommand(drivebase::addFakeVisionReading));
     //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
     // InstantCommand(drivebase::lock, drivebase)));
+    driverController.button(10).toggleOnTrue(new InstantCommand(() -> drivebase.zeroGyro()));
   }
 
   /**

@@ -7,6 +7,7 @@ package frc.robot.commands.swervedrive.drivebase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -116,5 +117,19 @@ public class AbsoluteDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty(
+        "Target Rotation Speed",
+        () ->
+            swerve.getTargetSpeeds(
+                    vX.getAsDouble(),
+                    vY.getAsDouble(),
+                    headingHorizontal.getAsDouble(),
+                    headingVertical.getAsDouble())
+                .omegaRadiansPerSecond,
+        null);
   }
 }
