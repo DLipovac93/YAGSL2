@@ -84,7 +84,7 @@ public class RobotContainer {
             drivebase,
             () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> driverXbox.getRawAxis(2),
+            () -> driverXbox.getRightX(),
             () -> true);
     TeleopDrive closedFieldRel =
         new TeleopDrive(
@@ -96,7 +96,7 @@ public class RobotContainer {
             () -> -driverController.getZ(),
             () -> true);
 
-    drivebase.setDefaultCommand(closedFieldRel);
+    drivebase.setDefaultCommand(closedAbsoluteDrive);
   }
 
   /**

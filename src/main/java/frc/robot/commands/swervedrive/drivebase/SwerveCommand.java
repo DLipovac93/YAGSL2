@@ -1,5 +1,6 @@
 package frc.robot.commands.swervedrive.drivebase;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -26,7 +27,6 @@ public class SwerveCommand extends CommandBase {
     double forward = joystick.getY() * MAX_FWD_SENS;
     double sideways = joystick.getX() * MAX_STR_SENS;
     double rotation = joystick.getZ() * MAX_ROT_SENS;
-
-    swerve.driveFieldOriented(new ChassisSpeeds(forward, sideways, rotation));
-  }
+    
+    }
 }
