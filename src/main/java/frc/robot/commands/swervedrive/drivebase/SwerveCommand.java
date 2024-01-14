@@ -6,10 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
-/**
- * The only goal of this command is to move either robot
- * or angle centric
- */
+/** The only goal of this command is to move either robot or angle centric */
 public class SwerveCommand extends CommandBase {
 
   private SwerveSubsystem swerve;
@@ -32,12 +29,10 @@ public class SwerveCommand extends CommandBase {
     targetAngle = swerve.getHeading();
 
     addRequirements(swerve);
-
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -49,7 +44,8 @@ public class SwerveCommand extends CommandBase {
 
     switch (driveMode) {
       case RobotCentric:
-        swerve.driveRobotCentric(new ChassisSpeeds(forwardVelocity, strafeVelocity, rotationVelocity));
+        swerve.driveRobotCentric(
+            new ChassisSpeeds(forwardVelocity, strafeVelocity, rotationVelocity));
         break;
 
       case AngleCentric:
@@ -57,21 +53,16 @@ public class SwerveCommand extends CommandBase {
           targetAngle = Rotation2d.fromDegrees(90 + 90 * Math.signum(-xbox.getRightY()));
         }
         targetAngle = Rotation2d.fromDegrees(targetAngle.getDegrees() + rotationVelocity);
-        swerve.driveAngleCentric(
-            forwardVelocity,
-            strafeVelocity,
-            targetAngle);
+        swerve.driveAngleCentric(forwardVelocity, strafeVelocity, targetAngle);
         break;
 
       default:
         break;
     }
-
   }
 
   enum DriveMode {
     RobotCentric,
     AngleCentric
   }
-
 }
