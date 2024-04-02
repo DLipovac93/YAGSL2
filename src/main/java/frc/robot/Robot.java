@@ -4,14 +4,25 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.server.PathPlannerServer;
+import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.HardwareConstants;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 import swervelib.parser.SwerveParser;
 
 /**
@@ -20,7 +31,7 @@ import swervelib.parser.SwerveParser;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
 
   private static Robot instance;
   private Command m_autonomousCommand;
@@ -43,14 +54,54 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    PathPlannerServer.startServer(5811);
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
+    // Record metadata about robot code
+    Logger.recordMetadata("ProjectName", "2024-Robot");
+    Logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    // Determine if the git repo is dirty
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        Logger.recordMetadata("GitDirty", "Clean");
+        break;
+      case 1:
+        Logger.recordMetadata("GitDirty", "Uncommitted changes");
+        break;
+      default:
+        Logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    Logger.addDataReceiver(new NT4Publisher());
+    if (isReal()) {
+      LoggedPowerDistribution.getInstance(HardwareConstants.REV_PDH_ID, ModuleType.kRev);
+      Logger.registerURCL(URCL.startExternal());
+      if (Paths.get("/U").getParent() != null) {
+        Logger.addDataReceiver(new WPILOGWriter());
+        SignalLogger.start();
+      } else {
+        setUseTiming(false);
+        try {
+          String logPath = LogFileUtil.findReplayLog();
+          Logger.setReplaySource(new WPILOGReader(logPath));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+      PortForwarder.add(5800, "photonvision-limelight", 5800);
+      PortForwarder.add(5800, "photonvision-rpi", 5800);
+    }
+
+    // Start logging
+    Logger.start();
+
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    // Create a timer to disable motor brake a few seconds after disable. This will
-    // let the robot
+    // Create a timer to disable motor brake a few seconds after disable.  This will let the robot
     // stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
@@ -65,12 +116,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
@@ -116,6 +164,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
   }
 
